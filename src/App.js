@@ -5,6 +5,8 @@ import { Spin } from 'antd';
 import { Row, Col } from 'antd';
 import { Radio } from 'antd';
 import { Input } from 'antd';
+import { Menu, Dropdown, Icon, message } from 'antd';
+import { Select } from 'antd';
 import './App.css';
 
 class AdDetail extends Component {
@@ -120,7 +122,7 @@ class AdDetail extends Component {
         return (
             <div>
                 <Row>
-                    <Col span={24}>
+                    <Col span={12}>
                         <Row className="ColInfo">
                             <Col span={22} ><h2>广告详情:</h2></Col>
                         </Row>
@@ -168,6 +170,36 @@ class AdDetail extends Component {
         );
     }
 }
+
+
+    class PickerData extends React.Component {
+
+
+
+        state = {
+            size: 'default',
+        };
+
+        handleSizeChange = (e) => {
+            this.setState({ size: e.target.value });
+        }
+
+        render() {
+            const { MonthPicker, RangePicker } = DatePicker;
+            const { size } = this.state;
+            return (
+                <div>
+                    <Radio.Group value={size} onChange={this.handleSizeChange}>
+                        <Radio.Button value="large">今天</Radio.Button>
+                        <Radio.Button value="default">昨天</Radio.Button>
+                        <Radio.Button value="small">最近30天</Radio.Button>
+                    </Radio.Group>
+                    <RangePicker size="default" />
+                </div>
+            );
+        }
+    }
+
 
 class App extends Component {
 
@@ -454,17 +486,50 @@ class App extends Component {
         console.log(`radio checked:${e.target.value}`);
     }
 
+    handleMenuClick(e) {
+        message.info('Click on menu item.');
+        console.log('click', e);
+    }
+
+    handleChange(value) {
+        console.log(`selected ${value}`);
+    }
 
     render() {
 
         const RadioButton = Radio.Button;
         const RadioGroup = Radio.Group;
 
+        const Option = Select.Option;
+
+
+
+        const menu = (
+            <Menu onClick={e => this.handleMenuClick(e)}>
+                <Menu.Item key="1">投放中(暂停时段)</Menu.Item>
+                <Menu.Item key="2">投放中(账户余额即将不足)</Menu.Item>
+                <Menu.Item key="3">未投放(广告花费达到限额)</Menu.Item>
+            </Menu>
+        );
 
         return (
             <div className="App">
-                <div>
-                    <Row className="ColInfo" type="flex" align="middle" justify="start">
+                <div className="tab">
+                    <div>
+                        <ul>
+                            <li class=''><a href='#'>Codepen</a></li>
+                            <li class='active'><a href='#'>Dribbble</a></li>
+                            <li><a href='#'>Dropbox</a></li>
+                            <li><a href='#'>Drupal</a></li>
+                        </ul>
+                    </div>
+                    <div className="space"></div>
+                    <PickerData />
+
+                </div>
+
+                <div className="search-Div">
+                    <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
                         <Col span={2}>用户:</Col>
                         <Col className="gutter-row">
                             <Row type="flex" justify="start">
@@ -477,49 +542,122 @@ class App extends Component {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col span={8} className="username-input">
-                            <Row  type="flex" align="middle" justify="start">
-                                <Input size="large" placeholder="用户名" />
+                        <Col  className="username-input">
+                            <Row type="flex" align="bottom" justify="start">
+                                <Col><Input size="default" placeholder="用户名" /></Col>
+                                <Col><Input size="default" placeholder="用户名1" /></Col>
                             </Row>
                         </Col>
                     </Row>
                     <Row className="ColInfo" type="flex" align="middle" justify="start">
-                        <Col span={2}>投放时间:</Col>
-                        <Col span={22}>
+                        <Col span={2}>游戏:</Col>
+                        <Col span={4}>
+                            <Input size="default" placeholder="游戏ID" />
+                        </Col>
+                    </Row>
+                    <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
+                        <Col span={2}>广告:</Col>
+                        <Col>
                             <Row type="flex" justify="start">
                                 <Col>
-                                2017.08.10-2017.08.21
+                                    <RadioGroup onChange={e => this.userTypeChange(e)} defaultValue="a" >
+                                        <RadioButton value="a">全部类型</RadioButton>
+                                        <RadioButton value="b">搜索广告</RadioButton>
+                                        <RadioButton value="c">定向广告</RadioButton>
+                                    </RadioGroup>
                                 </Col>
                             </Row>
                         </Col>
+                        <Col>
+                            <Row type="flex" justify="start">
+                                <Col>
+                                    <RadioGroup onChange={e => this.userTypeChange(e)} defaultValue="a" >
+                                        <RadioButton value="a">全部类型</RadioButton>
+                                        <RadioButton value="b">广告未投放</RadioButton>
+                                        <RadioButton value="c">暂停中</RadioButton>
+                                    </RadioGroup>
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col>
+                            <Dropdown.Button overlay={menu}>
+                                选择其他状态
+                            </Dropdown.Button>
+                        </Col>
+                        <Col>
+                            <Select
+                                showSearch
+                                style={{ width: 200 }}
+                                placeholder="选择其他广告状态"
+                                optionFilterProp="children"
+                                onChange={value =>this.handleChange(value)}
+                                filterOption={(input, option) => {/*console.log(option.props);*/return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;}}
+                            >
+                                <Option value="1">投放中(暂停时段)</Option>
+                                <Option value="2">投放中(账户余额即将不足)</Option>
+                                <Option value="3">未投放(广告花费达到限额)</Option>
+
+                            </Select>
+                        </Col>
+                        <Col span={2}>
+                            <Input size="default" placeholder="游戏ID" />
+                        </Col>
+
+
                     </Row>
 
-                    <Row className="ColInfo">
-                        <Col span={2}>关键词:</Col>
-                        <Col span={22}>[精确匹配] 卡卡跑订车,卡卡跑订车,卡卡跑订车,卡卡跑订车,卡卡跑订车,卡卡跑订车,卡卡跑订车,
-                            ,卡卡跑订车,卡卡跑订车,卡卡跑订车,卡卡跑订车,卡卡跑订车,卡卡跑订车</Col>
-                    </Row>
-                    <Row className="ColInfo">
-                        <Col span={2}>匹配模式:</Col>
-                        <Col span={22}>不限</Col>
+                    <Row gutter={8}>
+                        <Col span={2} offset={1}>
+                            <Button type="primary" icon="search">搜索</Button>
+                        </Col>
+                        <Col span={2}>
+                            <Button type="primary" icon="reload">重置</Button>
+                        </Col>
                     </Row>
 
                 </div>
+                <div className="sortDiv">
+                    <Row type="flex" justify="start" align="middle" gutter={8}>
+                        <Col>
+                            <label>排序方式:</label>
+                        </Col>
+                        <Col>
+                            <Select
+                                showSearch
+                                style={{ width: 200 }}
+                                placeholder="选择其他广告状态"
+                                optionFilterProp="children"
+                                onChange={value =>this.handleChange(value)}
+                                filterOption={(input, option) => {/*console.log(option.props);*/return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;}}
+                            >
+                                <Option value="1">投放中(暂停时段)</Option>
+                                <Option value="2">投放中(账户余额即将不足)</Option>
+                                <Option value="3">未投放(广告花费达到限额)</Option>
 
+                            </Select>
+                        </Col>
+                    </Row>
 
-                <Button onClick={e => this.handleClick(e)}>改变数据</Button>
-                <Table
-                    columns={this.state.columns}
-                    bordered
-                    size="middle"
-                    /*scroll={{ y: 1240 }}*/
-                    scroll
-                    expandedRowRender={record => { if(record.key === 0) return null ;else return <AdDetail adInfo={record} />}}
-                    dataSource={this.state.data}
-                    className="tableInfo"
-                />
+                </div>
+                <div>
+                    <Table
+                        columns={this.state.columns}
+                        bordered
+                        size="middle"
+                        /*scroll={{ y: 1240 }}*/
+                        expandedRowRender={record => { if(record.key === 0) return null ;else return <AdDetail adInfo={record} />}}
+                        dataSource={this.state.data}
+                        className="tableInfo"
+                    />
+                </div>
             </div>
         );
+
+
+
+
+
+
     }
 }
 

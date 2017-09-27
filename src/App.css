@@ -49,6 +49,16 @@
   float: left;
 }
 
+.sortDiv {
+  margin-left: 10px;
+  margin-right: -4px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.search-Div {
+  border: solid 1px black;
+}
 
 .username-input .ant-input {
   
@@ -59,4 +69,44 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+
+.tab ul {
+  margin-top: 10px;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+}
+
+.tab li a {
+  display: block;
+  text-decoration: none;
+  margin: 0 0 -1px;
+  padding: 15px 25px;
+  font-weight: 600;
+  text-align: center;
+  color: #bbb;
+  border: 1px solid transparent;
+  border-bottom: 1px solid lightgray;
+}
+
+
+.tab li.active a {
+  color: #555;
+  border: 1px solid #ddd;
+  border-top: 2px solid orange;
+  border-bottom: 1px solid transparent;
+}
+
+.tab {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.space {
+  flex-grow:1;
 }
