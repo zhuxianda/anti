@@ -7,6 +7,7 @@ import { Radio } from 'antd';
 import { Input } from 'antd';
 import { Menu, Dropdown, Icon, message } from 'antd';
 import { Select } from 'antd';
+import { Tabs } from 'antd';
 import './App.css';
 
 class AdDetail extends Component {
@@ -495,6 +496,10 @@ class App extends Component {
         console.log(`selected ${value}`);
     }
 
+    handleTabChange(key) {
+        console.log(`selected ${key}`);
+    }
+
     render() {
 
         const RadioButton = Radio.Button;
@@ -502,7 +507,9 @@ class App extends Component {
 
         const Option = Select.Option;
 
+        const TabPane = Tabs.TabPane;
 
+        const operations = <PickerData />;
 
         const menu = (
             <Menu onClick={e => this.handleMenuClick(e)}>
@@ -514,17 +521,14 @@ class App extends Component {
 
         return (
             <div className="App">
+
                 <div className="tab">
-                    <div>
-                        <ul>
-                            <li class=''><a href='#'>Codepen</a></li>
-                            <li class='active'><a href='#'>Dribbble</a></li>
-                            <li><a href='#'>Dropbox</a></li>
-                            <li><a href='#'>Drupal</a></li>
-                        </ul>
-                    </div>
-                    <div className="space"></div>
-                    <PickerData />
+                        <Tabs tabBarExtraContent={operations} onChange={ key => this.handleTabChange(key)} type="card"
+                              >
+                            <TabPane tab="Tab 1" key="1"></TabPane>
+                            <TabPane tab="Tab 2" key="2"></TabPane>
+                            <TabPane tab="Tab 3" key="3"></TabPane>
+                        </Tabs>
 
                 </div>
 
