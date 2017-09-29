@@ -8,6 +8,8 @@ import { Input } from 'antd';
 import { Menu, Dropdown, Icon, message } from 'antd';
 import { Select } from 'antd';
 import { Tabs } from 'antd';
+import moment from 'moment';
+import reqwest from 'reqwest';
 import './App.css';
 
 class AdDetail extends Component {
@@ -173,29 +175,88 @@ class AdDetail extends Component {
 }
 
 
-    class PickerData extends React.Component {
+class PickerData extends React.Component {
 
+        constructor(props) {
+            super(props);
+            this.state = {
+                option: null,
+                selected:'1',
+                start:this.GetDateStr(0),
+                end:this.GetDateStr(0),
+            }
 
+        }
 
-        state = {
+/*        state = {
             size: 'default',
-        };
+        };*/
+
+        GetDateStr = (AddDayCount) => {
+
+            var dd = new Date();
+            dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期
+            var y = dd.getFullYear();
+            var m = dd.getMonth() + 1;//获取当前月份的日期
+            var d = dd.getDate();
+
+            return y + "-" + m + "-" + d;
+        }
 
         handleSizeChange = (e) => {
-            this.setState({ size: e.target.value });
+            //this.setState({ size: e.target.value });
+            const value = e.target.value;
+            console.log(value);
+            if(value == 1) {
+                console.log(this.GetDateStr(0),this.GetDateStr(0));
+                this.setState({selected:'1',start:this.GetDateStr(0),end:this.GetDateStr(0)});
+            } else if(value == 2) {
+                console.log(this.GetDateStr(-1),this.GetDateStr(-1));
+                this.setState({selected:'2',start:this.GetDateStr(-1),end:this.GetDateStr(-1)});
+            } else if(value == 3) {
+                console.log(this.GetDateStr(0),this.GetDateStr(-7));
+                this.setState({selected:'3',start:this.GetDateStr(-7),end:this.GetDateStr(0)});
+            } else if(value == 4) {
+                console.log(this.GetDateStr(0),this.GetDateStr(-30));
+                this.setState({selected:'4',start:this.GetDateStr(-30),end:this.GetDateStr(0)});
+            }
+
+            console.log(this.state);
+
+            this.props.getSearchTime(this.state.start,this.state.end);
+
         }
+
+        dateChange = (monent,dataString) => {
+            console.log(monent,dataString);
+            this.setState(
+                    {
+                        start:dataString[0],
+                        end:dataString[1],
+                        selected:0,
+                    }
+                )
+
+        }
+
+
 
         render() {
             const { MonthPicker, RangePicker } = DatePicker;
-            const { size } = this.state;
+            const { selected } = this.state;
+            const dateFormat = 'YYYY-MM-DD';
             return (
                 <div>
-                    <Radio.Group value={size} onChange={this.handleSizeChange}>
-                        <Radio.Button value="large">今天</Radio.Button>
-                        <Radio.Button value="default">昨天</Radio.Button>
-                        <Radio.Button value="small">最近30天</Radio.Button>
+                    <Radio.Group value={selected} onChange={this.handleSizeChange}>
+                        <Radio.Button value="1">今天</Radio.Button>
+                        <Radio.Button value="2">昨天</Radio.Button>
+                        <Radio.Button value="3">最近7天</Radio.Button>
+                        <Radio.Button value="4">最近30天</Radio.Button>
                     </Radio.Group>
-                    <RangePicker size="default" />
+                    <RangePicker size="default" defaultValue={[moment(this.state.start, dateFormat), moment(this.state.end, dateFormat)]}
+                                 format="YYYY-MM-DD" onChange={(monent,dataString) => this.dateChange(monent,dataString)}
+                                 value={[moment(this.state.start, dateFormat), moment(this.state.end, dateFormat)]}
+                    />
                 </div>
             );
         }
@@ -203,7 +264,6 @@ class AdDetail extends Component {
 
 
 class App extends Component {
-
 
     constructor(props) {
 
@@ -464,9 +524,23 @@ class App extends Component {
         this.state = {
             columns: columns,
             data:data,
+            start:this.GetDateStr(0),
+            end:this.GetDateStr(0),
         }
 
     }
+
+    GetDateStr = (AddDayCount) => {
+
+        var dd = new Date();
+        dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期
+        var y = dd.getFullYear();
+        var m = dd.getMonth() + 1;//获取当前月份的日期
+        var d = dd.getDate();
+
+        return y + "-" + m + "-" + d;
+    }
+
 
     handleClick(e) {
         this.setState(prevState => {
@@ -500,6 +574,34 @@ class App extends Component {
         console.log(`selected ${key}`);
     }
 
+    fetch = (params = {}) => {
+        console.log('params:', params);
+        this.setState({ loading: true });
+        reqwest({
+            url: 'https://randomuser.me/api',
+            method: 'get',
+            data: {
+                results: 10,
+                ...params,
+            },
+            type: 'json',
+        }).then((data) => {
+            const pagination = { ...this.state.pagination };
+            // Read total count from server
+            // pagination.total = data.totalCount;
+            pagination.total = 200;
+            this.setState({
+                loading: false,
+                data: data.results,
+                pagination,
+            });
+        });
+    }
+
+    componentDidMount() {
+        this.fetch();
+    }
+
     render() {
 
         const RadioButton = Radio.Button;
@@ -509,7 +611,7 @@ class App extends Component {
 
         const TabPane = Tabs.TabPane;
 
-        const operations = <PickerData />;
+        const operations = <PickerData getSearchTime={(start,end) => this.setState({start:start,end:end})}/>;
 
         const menu = (
             <Menu onClick={e => this.handleMenuClick(e)}>
@@ -519,19 +621,10 @@ class App extends Component {
             </Menu>
         );
 
-        return (
-            <div className="App">
 
-                <div className="tab">
-                        <Tabs tabBarExtraContent={operations} onChange={ key => this.handleTabChange(key)} type="card"
-                              >
-                            <TabPane tab="Tab 1" key="1"></TabPane>
-                            <TabPane tab="Tab 2" key="2"></TabPane>
-                            <TabPane tab="Tab 3" key="3"></TabPane>
-                        </Tabs>
-
-                </div>
-
+        const Allad = (
+            <div>
+                <div><label>{this.state.start},{this.state.end}</label></div>
                 <div className="search-Div">
                     <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
                         <Col span={2}>用户:</Col>
@@ -553,7 +646,7 @@ class App extends Component {
                             </Row>
                         </Col>
                     </Row>
-                    <Row className="ColInfo" type="flex" align="middle" justify="start">
+                    <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
                         <Col span={2}>游戏:</Col>
                         <Col span={4}>
                             <Input size="default" placeholder="游戏ID" />
@@ -610,12 +703,12 @@ class App extends Component {
 
                     </Row>
 
-                    <Row gutter={8}>
-                        <Col span={2} offset={1}>
-                            <Button type="primary" icon="search">搜索</Button>
+                    <Row type="flex" align="middle" justify="start">
+                        <Col span={1} offset={2}>
+                            <Button type="primary" icon="search" className="button">搜索</Button>
                         </Col>
-                        <Col span={2}>
-                            <Button type="primary" icon="reload">重置</Button>
+                        <Col span={1}>
+                            <Button type="primary" icon="reload" className="button">重置</Button>
                         </Col>
                     </Row>
 
@@ -654,6 +747,25 @@ class App extends Component {
                         className="tableInfo"
                     />
                 </div>
+
+            </div>
+        );
+
+
+
+        return (
+            <div className="App">
+
+                <div className="tab">
+                        <Tabs tabBarExtraContent={operations} onChange={ key => this.handleTabChange(key)} type="card"
+                              >
+                            <TabPane tab="Tab 1" key="1">{Allad}</TabPane>
+                            <TabPane tab="Tab 2" key="2">123</TabPane>
+                            <TabPane tab="Tab 3" key="3">456</TabPane>
+                        </Tabs>
+
+                </div>
+
             </div>
         );
 

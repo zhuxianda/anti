@@ -58,6 +58,9 @@
 
 .search-Div {
   border: solid 1px black;
+  margin-top: -15px;
+  padding-bottom: 15px;
+
 }
 
 .username-input .ant-input {
@@ -121,4 +124,8 @@
 
 .space {
   flex-grow:1;
+}
+
+.button {
+  /*width: 50px;*/
 }
