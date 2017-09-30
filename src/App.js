@@ -203,39 +203,62 @@ class PickerData extends React.Component {
             return y + "-" + m + "-" + d;
         }
 
+/*        setDataState(start,end) {
+            this.setState(() => {
+                return {selected:'2',start:this.GetDateStr(-1),end:this.GetDateStr(-1)};
+            }
+
+
+            });
+        }*/
+
         handleSizeChange = (e) => {
             //this.setState({ size: e.target.value });
             const value = e.target.value;
+            let start = '';
+            let end = '';
             console.log(value);
             if(value == 1) {
-                console.log(this.GetDateStr(0),this.GetDateStr(0));
-                this.setState({selected:'1',start:this.GetDateStr(0),end:this.GetDateStr(0)});
+                //console.log(this.GetDateStr(0),this.GetDateStr(0));
+                start = this.GetDateStr(0);
+                end = this.GetDateStr(0);
+                this.setState({selected:'1',start:start,end:end});
             } else if(value == 2) {
-                console.log(this.GetDateStr(-1),this.GetDateStr(-1));
-                this.setState({selected:'2',start:this.GetDateStr(-1),end:this.GetDateStr(-1)});
+                //console.log(this.GetDateStr(-1),this.GetDateStr(-1));
+                start = this.GetDateStr(-1);
+                end = this.GetDateStr(-1);
+                //this.setState({selected:'2',start:this.GetDateStr(-1),end:this.GetDateStr(-1)});
             } else if(value == 3) {
-                console.log(this.GetDateStr(0),this.GetDateStr(-7));
-                this.setState({selected:'3',start:this.GetDateStr(-7),end:this.GetDateStr(0)});
+                //console.log(this.GetDateStr(0),this.GetDateStr(-7));
+                //this.setState({selected:'3',start:this.GetDateStr(-7),end:this.GetDateStr(0)});
+                start = this.GetDateStr(-7);
+                end = this.GetDateStr(0);
             } else if(value == 4) {
-                console.log(this.GetDateStr(0),this.GetDateStr(-30));
-                this.setState({selected:'4',start:this.GetDateStr(-30),end:this.GetDateStr(0)});
+                start = this.GetDateStr(-30);
+                end = this.GetDateStr(0);
+                //console.log(this.GetDateStr(0),this.GetDateStr(-30));
+                //this.setState({selected:'4',start:this.GetDateStr(-30),end:this.GetDateStr(0)});
             }
 
-            console.log(this.state);
+            this.setState({selected:value+'',start:start,end:end});
 
-            this.props.getSearchTime(this.state.start,this.state.end);
+            //console.log(this.state);
+
+            this.props.getSearchTime(start,end);
 
         }
 
         dateChange = (monent,dataString) => {
             console.log(monent,dataString);
-            this.setState(
-                    {
-                        start:dataString[0],
+            this.setState(() => {
+                this.props.getSearchTime(dataString[0],dataString[1]);
+                return {
+                    start:dataString[0],
                         end:dataString[1],
-                        selected:0,
-                    }
-                )
+                    selected:0,
+                }
+            });
+
 
         }
 
@@ -586,7 +609,7 @@ class App extends Component {
             },
             type: 'json',
         }).then((data) => {
-            const pagination = { ...this.state.pagination };
+/*            const pagination = { ...this.state.pagination };
             // Read total count from server
             // pagination.total = data.totalCount;
             pagination.total = 200;
@@ -594,7 +617,8 @@ class App extends Component {
                 loading: false,
                 data: data.results,
                 pagination,
-            });
+            });*/
+            console.log(data);
         });
     }
 
