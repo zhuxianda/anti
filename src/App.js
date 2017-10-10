@@ -594,7 +594,8 @@ class App extends Component {
     }
 
     handleTabChange(key) {
-        console.log(`selected ${key}`);
+        console.log(`selected 1111 ${key}`);
+        this.setState({tabSelected:key});
     }
 
     fetch = (params = {}) => {
@@ -648,7 +649,9 @@ class App extends Component {
 
         const Allad = (
             <div>
-                <div><label>{this.state.start},{this.state.end}</label></div>
+                <div>
+                    <label>{this.state.start},{this.state.end}</label>
+                </div>
                 <div className="search-Div">
                     <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
                         <Col span={2}>用户:</Col>
@@ -664,10 +667,7 @@ class App extends Component {
                             </Row>
                         </Col>
                         <Col  className="username-input">
-                            <Row type="flex" align="bottom" justify="start">
-                                <Col><Input size="default" placeholder="用户名" /></Col>
-                                <Col><Input size="default" placeholder="用户名1" /></Col>
-                            </Row>
+                            <Input size="default" placeholder="用户名1" />
                         </Col>
                     </Row>
                     <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
@@ -771,7 +771,6 @@ class App extends Component {
                         className="tableInfo"
                     />
                 </div>
-
             </div>
         );
 
@@ -782,12 +781,12 @@ class App extends Component {
 
                 <div className="tab">
                         <Tabs tabBarExtraContent={operations} onChange={ key => this.handleTabChange(key)} type="card"
-                              >
+                              activeKey={this.state.tabSelected}>
                             <TabPane tab="Tab 1" key="1">{Allad}</TabPane>
                             <TabPane tab="Tab 2" key="2">123</TabPane>
                             <TabPane tab="Tab 3" key="3">456</TabPane>
                         </Tabs>
-
+                    <Button onClick={e => this.handleTabChange('1')}>改变Ｔａｂ</Button>
                 </div>
 
             </div>

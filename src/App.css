@@ -46,7 +46,9 @@
 }
 
 .username-input {
-  float: left;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-end;
 }
 
 .sortDiv {
@@ -64,9 +66,7 @@
 }
 
 .username-input .ant-input {
-  
   width: 200px;
-  margin: 0 8px 8px 0;
 }
 
 @keyframes App-logo-spin {
