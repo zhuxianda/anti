@@ -601,16 +601,16 @@ class App extends Component {
     fetch = (params = {}) => {
         console.log('params:', params);
         this.setState({ loading: true });
-        reqwest({
-            url: 'https://randomuser.me/api',
-            method: 'get',
-            data: {
-                results: 10,
-                ...params,
-            },
+/*        reqwest({
+            url: 'http://e.4399.cn:8112/targetAdPlan/getDatatraceProfileByGid.do',
+        method: 'get',
+/!*            // data: {
+            //     results: 10,
+            //     ...params,
+            // },*!/
             type: 'json',
         }).then((data) => {
-/*            const pagination = { ...this.state.pagination };
+/!*            const pagination = { ...this.state.pagination };
             // Read total count from server
             // pagination.total = data.totalCount;
             pagination.total = 200;
@@ -618,9 +618,14 @@ class App extends Component {
                 loading: false,
                 data: data.results,
                 pagination,
-            });*/
-            console.log(data);
-        });
+            });*!/
+            console.log("12345",data);
+        });*/
+
+        fetch('http://e.4399.cn:8112/targetAdPlan/getDatatraceProfileByGid.do',{credentials: 'include'}).then(response => response.json())
+            .then(data => console.log(data))
+            .catch(e => console.log("Oops, error", e))
+
     }
 
     componentDidMount() {
