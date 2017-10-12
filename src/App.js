@@ -10,6 +10,8 @@ import { Select } from 'antd';
 import { Tabs } from 'antd';
 import moment from 'moment';
 import reqwest from 'reqwest';
+
+
 import './App.css';
 
 class AdDetail extends Component {
@@ -293,32 +295,69 @@ class App extends Component {
         super(props);
 
         const columns = [
-            {title: '广告名', dataIndex: 'name', key: 'name',width:100},
-            {title: '游戏信息', dataIndex: 'age', key: 'age',width:100},
-            {title: '花费              (现金+虚拟)', dataIndex: 'age', key: 'age0',width:150
+            {title: '广告名', dataIndex: 'planname', key: 'planname',width:100},
+            {title: '游戏信息', dataIndex: 'gpic', key: 'gpic',width:160,render: (gpic,record) => {
+                return (
+                    <div style={{display: 'flex','flex-direction': 'row','align-items':'center'}}>
+                        <img src={gpic} height="40" width="40" />
+                        <div style={{'margin-left': '10px'}}>{record.gname}<br></br>{record.notes}</div>
+                    </div>
+                );
+            }},
+            {title: <div style={{'text-align': 'center'}}>花费<br></br>(现金+虚拟)</div>, dataIndex: 'age', key: 'age0',width:150
 /*                render: text => <a href="#">{text}111</a>,
                 children: [
                     {dataIndex: 'rlCost', key: 'age1', title: '現金',render: text => <a href="#">{text}<br/>111</a>,},
                     /!*{dataIndex: 'vlCost', key: 'age2',title: '虚拟',},*!/
                 ]*/
             },
-            {title: '下载均价(出价)', dataIndex: 'age', key: 'age1',},
+            {title: <div style={{'text-align': 'center'}}>下载均价<br></br>出价</div>, dataIndex: 'age', key: 'age1',},
             {title: 'ECPM', dataIndex: 'age', key: 'age2',},
-            {title: '下载率%(自然下载率)', dataIndex: 'age', key: 'age3',},
-            {title: '展示量%(自然展示量)', dataIndex: 'age', key: 'age4',},
-            {title: '下载量%(自然下载量)', dataIndex: 'age', key: 'age5',},
-            {title: '投放排名%(自然排名)', dataIndex: 'age', key: 'age6',},
+            {title: <div style={{'text-align': 'center'}}>下载率%<br></br>自然下载率%</div>, dataIndex: 'age', key: 'age3',},
+            {title: <div style={{'text-align': 'center'}}>展示量<br></br>自然展示量</div>, dataIndex: 'age', key: 'age4',},
+            {title: <div style={{'text-align': 'center'}}>下载量<br></br>自然下载量</div>, dataIndex: 'age', key: 'age5',},
+            {title: <div style={{'text-align': 'center'}}>投放排名<br></br>自然排名</div>, dataIndex: 'age', key: 'age6',},
             {title: '首屏', dataIndex: 'age', key: 'age7',},
             {title: '状态', dataIndex: 'age', key: 'age8',},
             {title: '限额(元)', dataIndex: 'age', key: 'age9',},
-            {title: 'Address', dataIndex: 'address', key: 'address'},
-            {title: 'Action', dataIndex: '', key: 'x', render: () => <Button>Delete</Button>},
         ];
 
-        const data = [
+        const data = [];
+        data.push(
             {
-                key: 0,
-                name: '总计',
+            planid: 0,
+            gname: '总计',
+            age: 32,
+            address: 'New York No. 1 Lake Park',
+            description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.',
+            rlCost:1,
+            vlCost:1,
+        });
+
+        for (var i=1;i<35;i++) {
+            var recode = {
+                planid: i,
+                gname: '时空召唤(新英雄月神)',
+                gpic: "http://f1.img4399.com/sj~88665_logo_592400691db53.jpg",
+                username: "4399yyceshi",
+                planname:"时空召唤(新英雄月神)广告名",
+                notes: "网游-黄晓彬",
+                money: "4682.07",
+                virtualmoney: "4682.07",
+                truemoney: "0.00",
+                age: 32,
+                address: 'New York No. 1 Lake Park',
+                description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.',
+                rlCost:1,
+                vlCost:1,
+            };
+            data.push(recode);
+        }
+
+/*        const data = [
+            {
+                planid: 0,
+                gname: '总计',
                 age: 32,
                 address: 'New York No. 1 Lake Park',
                 description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.',
@@ -327,8 +366,8 @@ class App extends Component {
 
             },
             {
-                key: 1,
-                name: 'John Brown',
+                planid: 1,
+                gname: '时空召唤(新英雄月神)',
                 age: 32,
                 address: 'New York No. 1 Lake Park',
                 description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.',
@@ -336,8 +375,8 @@ class App extends Component {
                 vlCost:1,
             },
             {
-                key: 2,
-                name: 'Jim Green',
+                planid: 2,
+                gname: '时空召唤(新英雄月神)',
                 age: 42,
                 address: 'London No. 1 Lake Park',
                 description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.',
@@ -345,8 +384,8 @@ class App extends Component {
                 vlCost:1,
             },
             {
-                key: 3,
-                name: 'Joe Black',
+                planid: 3,
+                gname: '时空召唤(新英雄月神)',
                 age: 32,
                 address: 'Sidney No. 1 Lake Park',
                 description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
@@ -354,8 +393,8 @@ class App extends Component {
                 vlCost:1,
             },
             {
-                key: 4,
-                name: 'Joe Black',
+                planid: 4,
+                gname: '时空召唤(新英雄月神)',
                 age: 32,
                 address: 'Sidney No. 1 Lake Park',
                 description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
@@ -363,8 +402,8 @@ class App extends Component {
                 vlCost:1,
             },
             {
-                key: 5,
-                name: 'Joe Black',
+                planid: 5,
+                gname: '时空召唤(新英雄月神)',
                 age: 32,
                 address: 'Sidney No. 1 Lake Park',
                 description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
@@ -372,8 +411,8 @@ class App extends Component {
                 vlCost:1,
             },
             {
-                key: 6,
-                name: 'Joe Black',
+                planid: 6,
+                gname: '时空召唤(新英雄月神)',
                 age: 7,
                 address: 'Sidney No. 1 Lake Park',
                 description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
@@ -381,7 +420,115 @@ class App extends Component {
                 vlCost:1,
             },
             {
-                key: 8,
+                planid: 8,
+                gname: '时空召唤(新英雄月神)',
+                age: 32,
+                address: 'Sidney No. 1 Lake Park',
+                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
+                rlCost:1,
+                vlCost:1,
+            },
+            {
+                planid: 9,
+                gname: '时空召唤(新英雄月神)',
+                age: 32,
+                address: 'Sidney No. 1 Lake Park',
+                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
+                rlCost:1,
+                vlCost:1,
+            },
+            {
+                planid: 10,
+                gname: '时空召唤(新英雄月神)',
+                age: 32,
+                address: 'Sidney No. 1 Lake Park',
+                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
+                rlCost:1,
+                vlCost:1,
+            },
+            {
+                planid: 11,
+                gname: '时空召唤(新英雄月神)',
+                age: 32,
+                address: 'Sidney No. 1 Lake Park',
+                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
+                rlCost:1,
+                vlCost:1,
+            },
+            {
+                planid: 12,
+                gname: '时空召唤(新英雄月神)',
+                age: 32,
+                address: 'Sidney No. 1 Lake Park',
+                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
+                rlCost:1,
+                vlCost:1,
+            },
+            {
+                planid: 13,
+                gname: '时空召唤(新英雄月神)',
+                age: 32,
+                address: 'Sidney No. 1 Lake Park',
+                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
+                rlCost:1,
+                vlCost:1,
+            },
+            {
+                planid: 14,
+                gname: '时空召唤(新英雄月神)',
+                age: 32,
+                address: 'Sidney No. 1 Lake Park',
+                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
+                rlCost:1,
+                vlCost:1,
+            },
+            {
+                planid: 15,
+                gname: '时空召唤(新英雄月神)',
+                age: 32,
+                address: 'Sidney No. 1 Lake Park',
+                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
+                rlCost:1,
+                vlCost:1,
+            },
+            {
+                planid: 16,
+                gname: '时空召唤(新英雄月神)',
+                age: 32,
+                address: 'Sidney No. 1 Lake Park',
+                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
+                rlCost:1,
+                vlCost:1,
+            },
+            {
+                planid: 17,
+                gname: '时空召唤(新英雄月神)',
+                age: 32,
+                address: 'Sidney No. 1 Lake Park',
+                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
+                rlCost:1,
+                vlCost:1,
+            },
+            {
+                planid: 18,
+                gname: '时空召唤(新英雄月神)',
+                age: 32,
+                address: 'Sidney No. 1 Lake Park',
+                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
+                rlCost:1,
+                vlCost:1,
+            },
+            {
+                planid: 19,
+                gname: '时空召唤(新英雄月神)',
+                age: 32,
+                address: 'Sidney No. 1 Lake Park',
+                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
+                rlCost:1,
+                vlCost:1,
+            },
+            {
+                planid: 20,
                 name: 'Joe Black',
                 age: 32,
                 address: 'Sidney No. 1 Lake Park',
@@ -390,7 +537,7 @@ class App extends Component {
                 vlCost:1,
             },
             {
-                key: 9,
+                planid: 21,
                 name: 'Joe Black',
                 age: 32,
                 address: 'Sidney No. 1 Lake Park',
@@ -399,7 +546,7 @@ class App extends Component {
                 vlCost:1,
             },
             {
-                key: 10,
+                planid: 22,
                 name: 'Joe Black',
                 age: 32,
                 address: 'Sidney No. 1 Lake Park',
@@ -408,7 +555,7 @@ class App extends Component {
                 vlCost:1,
             },
             {
-                key: 11,
+                planid: 23,
                 name: 'Joe Black',
                 age: 32,
                 address: 'Sidney No. 1 Lake Park',
@@ -417,7 +564,7 @@ class App extends Component {
                 vlCost:1,
             },
             {
-                key: 12,
+                planid: 23,
                 name: 'Joe Black',
                 age: 32,
                 address: 'Sidney No. 1 Lake Park',
@@ -426,7 +573,7 @@ class App extends Component {
                 vlCost:1,
             },
             {
-                key: 13,
+                planid: 24,
                 name: 'Joe Black',
                 age: 32,
                 address: 'Sidney No. 1 Lake Park',
@@ -434,115 +581,7 @@ class App extends Component {
                 rlCost:1,
                 vlCost:1,
             },
-            {
-                key: 14,
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-                rlCost:1,
-                vlCost:1,
-            },
-            {
-                key: 15,
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-                rlCost:1,
-                vlCost:1,
-            },
-            {
-                key: 16,
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-                rlCost:1,
-                vlCost:1,
-            },
-            {
-                key: 17,
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-                rlCost:1,
-                vlCost:1,
-            },
-            {
-                key: 18,
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-                rlCost:1,
-                vlCost:1,
-            },
-            {
-                key: 19,
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-                rlCost:1,
-                vlCost:1,
-            },
-            {
-                key: 20,
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-                rlCost:1,
-                vlCost:1,
-            },
-            {
-                key: 21,
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-                rlCost:1,
-                vlCost:1,
-            },
-            {
-                key: 22,
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-                rlCost:1,
-                vlCost:1,
-            },
-            {
-                key: 23,
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-                rlCost:1,
-                vlCost:1,
-            },
-            {
-                key: 23,
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-                rlCost:1,
-                vlCost:1,
-            },
-            {
-                key: 24,
-                name: 'Joe Black',
-                age: 32,
-                address: 'Sidney No. 1 Lake Park',
-                description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-                rlCost:1,
-                vlCost:1,
-            },
-        ];
+        ];*/
 
         this.state = {
             columns: columns,
@@ -622,8 +661,14 @@ class App extends Component {
             console.log("12345",data);
         });*/
 
-        fetch('http://e.4399.cn:8112/targetAdPlan/getDatatraceProfileByGid.do',{credentials: 'include'}).then(response => response.json())
-            .then(data => console.log(data))
+        fetch('http://127.0.0.1:8080/adgame_ms/statistics/loadPlanStatistics0508ForWebix?date1=2017-10-04&date2=2017-10-11&username=&planname=&planId=&gid=&stateName=-1&plantype=0&pageNo=1&pageSize=24&sort=money&usertype=none&isFirstScreen=-1&isExact=false',{credentials: 'include'}).then(response => response.json())
+            .then(data =>
+            {
+                console.log(data.page.result)
+/*                this.setState({
+                    data:data.page.result,
+                })*/
+            })
             .catch(e => console.log("Oops, error", e))
 
     }
@@ -765,17 +810,23 @@ class App extends Component {
                     </Row>
 
                 </div>
-                <div>
-                    <Table
-                        columns={this.state.columns}
-                        bordered
-                        size="middle"
-                        /*scroll={{ y: 1240 }}*/
-                        expandedRowRender={record => { if(record.key === 0) return null ;else return <AdDetail adInfo={record} />}}
-                        dataSource={this.state.data}
-                        className="tableInfo"
-                    />
-                </div>
+                <Spin spinning={false}>
+                        <Table
+                            columns={this.state.columns}
+                            bordered
+                            size="middle"
+                            /*scroll={{ y: 1240 }}*/
+                            /*expandedRowRender={record => { if(record.key === 0) return null ;else return <AdDetail adInfo={record} />}}*/
+                            expandedRowRender={record => { console.log(record);return <AdDetail adInfo={record} />}}
+                            dataSource={this.state.data}
+                            className="tableInfo"
+                            pagination={{ pageSize: 24 }}
+                            locale={{emptyText:'没有找到相关信息，请更换搜索条件!'}}
+                            rowKey={record => record.planid}
+                            scroll={{ y: 740 }}
+                            /*loading={true}*/
+                        />
+                </Spin>
             </div>
         );
 
@@ -787,11 +838,12 @@ class App extends Component {
                 <div className="tab">
                         <Tabs tabBarExtraContent={operations} onChange={ key => this.handleTabChange(key)} type="card"
                               activeKey={this.state.tabSelected}>
-                            <TabPane tab="Tab 1" key="1">{Allad}</TabPane>
-                            <TabPane tab="Tab 2" key="2">123</TabPane>
-                            <TabPane tab="Tab 3" key="3">456</TabPane>
+                            <TabPane tab="用户列表" key="1">用户列表</TabPane>
+                            <TabPane tab="游戏列表" key="2">123</TabPane>
+                            <TabPane tab="广告列表" key="3">{Allad}</TabPane>
+                            <TabPane tab="用户进展" key="4">{Allad}</TabPane>
                         </Tabs>
-                    <Button onClick={e => this.handleTabChange('1')}>改变Ｔａｂ</Button>
+                    {/*<Button onClick={e => this.handleTabChange('1')}>改变Ｔａｂ</Button>*/}
                 </div>
 
             </div>
