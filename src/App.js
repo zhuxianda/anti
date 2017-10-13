@@ -20,21 +20,22 @@ class AdDetail extends Component {
         this.state = {
             option: null,
         }
+        const Option = Select.Option;
 
     }
 
     componentWillMount() {
 
         let option = {
-            title: {
-                text: '堆叠区域图'
-            },
+/*            title: {
+                text: ''
+            },*/
             tooltip: {
                 trigger: 'axis'
             },
-            legend: {
+/*            legend: {
                 data: ['邮件营销', '联盟广告', '视频广告']
-            },
+            },*/
             toolbox: {
                 feature: {
                     saveAsImage: {}
@@ -50,7 +51,10 @@ class AdDetail extends Component {
                 {
                     type: 'category',
                     boundaryGap: false,
-                    data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                    /*data: ['2017-09-14', '2017-09-14', '2017-09-14', '2017-09-14', '2017-09-14', '2017-09-14', '2017-09-14'],*/
+                    data: ['00:00-00:59', '01:00-01:59', '02:00-02:59', '03:00-03:59', '04:00-04:59', '05:00-05:59', '06:00-06:59','07:00-07:59',
+                        '08:00-08:59', '09:00-09:59', '10:00-10:59', '11:00-11:59', '12:00-12:59', '13:00-13:59','14:00-14:59',
+                        '15:00-15:59', '16:00-16:59', '17:00-17:59', '18:00-18:59', '19:00-19:59', '20:00-20:59', '21:00-21:59','22:00-22:59','23:00-23:59']
                 }
             ],
             yAxis: [
@@ -60,13 +64,13 @@ class AdDetail extends Component {
             ],
             series: [
                 {
-                    name: '邮件营销',
+                    name: '均价',
                     type: 'line',
                     //stack: '总量',
                     areaStyle: {normal: {}},
-                    data: [120, 132, 101, 134, 90, 230, 210]
+                    data: [1.11, 0.5, 1.01, 1.34, 0.90, 2.30, 2.10]
                 },
-                {
+/*                {
                     name: '联盟广告',
                     type: 'line',
                     //stack: '总量',
@@ -79,7 +83,7 @@ class AdDetail extends Component {
                     //stack: '总量',
                     areaStyle: {normal: {}},
                     data: [150, 232, 201, 154, 190, 330, 410]
-                }
+                }*/
             ]
         }
 
@@ -101,7 +105,8 @@ class AdDetail extends Component {
     }
 
     handleClick(e) {
-        this.setState(prevState => {
+        console.log(e,'1111')
+    /*        this.setState(prevState => {
             const option = prevState.option;
             const newName = new Date().toLocaleString();
             const newSeries = {
@@ -112,7 +117,10 @@ class AdDetail extends Component {
             return {
                 option: {...option, series: [...option.series, newSeries],legend:{data:[...option.legend.data,newName]},areaStyle: {normal: {}}}
             }
-        })
+        })*/
+
+        //
+
     }
 
     render() {
@@ -159,8 +167,24 @@ class AdDetail extends Component {
                         </Row>
 
                     </Col>
-                    <Col span={12}>
-                        <Button onClick={e => this.handleClick(e)}>花费</Button>
+                    <Col span={12} >
+                        <div style={{'margin-bottom': '10px','margin-top': '10px','margin-left': '10px',}}>
+{/*                            <Button onClick={e => this.handleClick(e)}>花费</Button>*/}
+                            <Select defaultValue="0" style={{ width: 120 }} onChange={e => this.handleClick(e)} >
+                                <Option value="0">花费</Option>
+                                <Option value="1">均价</Option>
+                                <Option value="2">出价</Option>
+                                <Option value="3">ecpm</Option>
+                                <Option value="4">下载率</Option>
+                                <Option value="5">自然下载率</Option>
+                                <Option value="6">展示量</Option>
+                                <Option value="7">自然展示量</Option>
+                                <Option value="8">下载量</Option>
+                                <Option value="9">投放排名</Option>
+                                <Option value="10">自然排名</Option>
+                            </Select>
+                        </div>
+
                         <div>
                             <ReactEcharts
                                 option={option}
@@ -295,31 +319,97 @@ class App extends Component {
         super(props);
 
         const columns = [
-            {title: '广告名', dataIndex: 'planname', key: 'planname',width:100},
-            {title: '游戏信息', dataIndex: 'gpic', key: 'gpic',width:160,render: (gpic,record) => {
+            {title: <div style={{'text-align': 'center'}}>广告名</div>, dataIndex: 'planname', key: 'planname',width:190},
+            {title: <div style={{'text-align': 'center'}}>游戏信息</div>, dataIndex: 'gpic', key: 'gpic',width:200,render: (gpic,record) => {
                 return (
-                    <div style={{display: 'flex','flex-direction': 'row','align-items':'center'}}>
+                    <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
                         <img src={gpic} height="40" width="40" />
                         <div style={{'margin-left': '10px'}}>{record.gname}<br></br>{record.notes}</div>
                     </div>
                 );
             }},
-            {title: <div style={{'text-align': 'center'}}>花费<br></br>(现金+虚拟)</div>, dataIndex: 'age', key: 'age0',width:150
-/*                render: text => <a href="#">{text}111</a>,
-                children: [
-                    {dataIndex: 'rlCost', key: 'age1', title: '現金',render: text => <a href="#">{text}<br/>111</a>,},
-                    /!*{dataIndex: 'vlCost', key: 'age2',title: '虚拟',},*!/
-                ]*/
+            {title: <div style={{'text-align': 'center'}}>花费<br></br>(现金+虚拟)</div>, dataIndex: 'money', key: 'money',width:130,
+                render: (money,record) => {
+                return (
+                    <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
+                        <div style={{'margin-left': '10px','text-align': 'center'}}>{money}<br></br>({record.truemoney}+{record.virtualmoney})</div>
+                    </div>
+                );}
             },
-            {title: <div style={{'text-align': 'center'}}>下载均价<br></br>出价</div>, dataIndex: 'age', key: 'age1',},
-            {title: 'ECPM', dataIndex: 'age', key: 'age2',},
-            {title: <div style={{'text-align': 'center'}}>下载率%<br></br>自然下载率%</div>, dataIndex: 'age', key: 'age3',},
-            {title: <div style={{'text-align': 'center'}}>展示量<br></br>自然展示量</div>, dataIndex: 'age', key: 'age4',},
-            {title: <div style={{'text-align': 'center'}}>下载量<br></br>自然下载量</div>, dataIndex: 'age', key: 'age5',},
-            {title: <div style={{'text-align': 'center'}}>投放排名<br></br>自然排名</div>, dataIndex: 'age', key: 'age6',},
-            {title: '首屏', dataIndex: 'age', key: 'age7',},
-            {title: '状态', dataIndex: 'age', key: 'age8',},
-            {title: '限额(元)', dataIndex: 'age', key: 'age9',},
+            {title: <div style={{'text-align': 'center'}}>下载均价<br></br>出价</div>, dataIndex: 'avgmoney', key: 'avgmoney',width:150,
+                render: (avgmoney,record) => {
+                    return (
+                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
+                            <div style={{'margin-left': '10px','text-align': 'center'}}>{avgmoney}<br></br>({record.bid})</div>
+                        </div>
+                    );}
+            },
+            {title: <div style={{'text-align': 'center'}}>ECPM</div>, dataIndex: 'ecpm', key: 'ecpm',width:130,
+                render: (budTypeName,record) => {
+                    return (
+                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
+                            <div style={{'margin-left': '10px','text-align': 'center'}}>{budTypeName}</div>
+                        </div>
+                    );}
+            },
+            {title: <div style={{'text-align': 'center'}}>下载率%<br></br>自然下载率%</div>, dataIndex: 'clickrate', key: 'clickrate',width:150,
+                render: (clickrate,record) => {
+                    return (
+                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
+                            <div style={{'margin-left': '10px','text-align': 'center'}}>{clickrate}<br></br>({record.naturalClickRadio})</div>
+                        </div>
+                    );}},
+            {title: <div style={{'text-align': 'center'}}>展示量<br></br>自然展示量</div>, dataIndex: 'displaycount', key: 'displaycount',width:150,
+                render: (clickrate,record) => {
+                    return (
+                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
+                            <div style={{'margin-left': '10px','text-align': 'center'}}>{clickrate}<br></br>({record.naturalClickRadio})</div>
+                        </div>
+                    );}
+            },
+            {title: <div style={{'text-align': 'center'}}>下载量<br></br>自然下载量</div>, dataIndex: 'clickcount', key: 'clickcount',width:130,
+                render: (clickcount,record) => {
+                    return (
+                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
+                            <div style={{'margin-left': '10px','text-align': 'center'}}>{clickcount}<br></br>({record.naturalDisplayAmount})</div>
+                        </div>
+                    );}
+            },
+            {title: <div style={{'text-align': 'center'}}>投放排名<br></br>自然排名</div>, dataIndex: 'avgpos', key: 'avgpos',width:130,
+                render: (avgpos,record) => {
+                    return (
+                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
+                            <div style={{'margin-left': '10px','text-align': 'center'}}>{avgpos}<br></br>({record.naturalAvgPos})</div>
+                        </div>
+                    );}
+            },
+            {title: <div style={{'text-align': 'center'}}>首屏</div>, dataIndex: 'isFirstScreen', key: 'isFirstScreen',width:120,
+                render: (isFirstScreen) => {
+                    let display = "不限";
+                    if(isFirstScreen == 1)
+                        display = '首屏';
+                    return (
+                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
+                            <div style={{'margin-left': '10px','text-align': 'center'}}>{display}</div>
+                        </div>
+                    );}
+            },
+            {title: <div style={{'text-align': 'center'}}>状态</div>, dataIndex: 'stateName', key: 'stateName',width:140,
+                render: (stateName,record) => {
+                    return (
+                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
+                            <div style={{'margin-left': '10px','text-align': 'center'}}>{stateName}</div>
+                        </div>
+                    );}
+            },
+            {title: <div style={{'text-align': 'center'}}>限额(元)</div>, dataIndex: 'budTypeName', key: 'budTypeName',
+                render: (budTypeName,record) => {
+                    return (
+                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
+                            <div style={{'margin-left': '10px','text-align': 'center'}}>{budTypeName}</div>
+                        </div>
+                    );}
+            },
         ];
 
         const data = [];
@@ -345,6 +435,19 @@ class App extends Component {
                 money: "4682.07",
                 virtualmoney: "4682.07",
                 truemoney: "0.00",
+                avgmoney: "0.50",
+                bid: "0.60",
+                ecpm: "4.26",
+                clickrate: "0.85%",
+                naturalClickRadio: "0.93%",
+                avgpos: "1.41",
+                naturalAvgPos: "1.00",
+                displaycount: 1099793,
+                naturalDisplayAmount: 18780,
+                clickcount:9338,
+                isFirstScreen: 0,
+                stateName: "投放结束",
+                budTypeName: "5000.00/天",
                 age: 32,
                 address: 'New York No. 1 Lake Park',
                 description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.',
