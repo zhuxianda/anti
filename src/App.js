@@ -20,7 +20,7 @@ class AdDetail extends Component {
         this.state = {
             option: null,
         }
-        const Option = Select.Option;
+
 
     }
 
@@ -68,7 +68,10 @@ class AdDetail extends Component {
                     type: 'line',
                     //stack: '总量',
                     areaStyle: {normal: {}},
-                    data: [1.11, 0.5, 1.01, 1.34, 0.90, 2.30, 2.10]
+                    data: [1.11, 0.5, 1.01, 1.34, 0.90, 2.30, 2.10,1.1,2,1,
+                        1.11, 0.5, 1.01, 1.34, 0.90, 2.30, 2.10,1.1,2,1.1,
+                        1.11, 0.5, 1.01, 1.34, 0.90, 2.30, 2.10,1.1,2,1.3],
+                    /*data: [1.11, 0.5, 1.01, 1.34, 0.90, 2.30, 2.10,1.7]*/
                 },
 /*                {
                     name: '联盟广告',
@@ -104,8 +107,36 @@ class AdDetail extends Component {
         // })
     }
 
-    handleClick(e) {
-        console.log(e,'1111')
+    handleTableSelectClick(e) {
+        console.log(e,'1111');
+
+        if(e == '1') {
+            this.setState(prevState => {
+                const option = prevState.option;
+                const newName = new Date().toLocaleString();
+                const newSeries = {
+                    name: e,
+                    type: 'line',
+                    data: [1.11, 0.5, 1.01, 1.34, 0.90, 2.30, 2.10,1.7],
+                   /* data: Array(7).fill(0).map(x => Math.random() * 500 | 0)*/
+                };
+                const newxAxisInfo = {
+                    ...prevState.option.xAxis[0],
+                    data:['2017-09-14', '2017-09-14', '2017-09-14', '2017-09-14', '2017-09-14', '2017-09-14', '2017-09-14'],
+
+                }
+                return {
+                    option: {
+                        ...option,
+                        series: newSeries,
+                        xAxis: [newxAxisInfo],
+                        //legend: {data: [...option.legend.data, newName]},
+                        //areaStyle: {normal: {}}
+                    }
+                };
+            })
+        }
+    }
     /*        this.setState(prevState => {
             const option = prevState.option;
             const newName = new Date().toLocaleString();
@@ -121,10 +152,10 @@ class AdDetail extends Component {
 
         //
 
-    }
-
     render() {
         const option = this.state.option;
+        const Option = Select.Option;
+
         if(!option) {
             return (
                 <div className="example">
@@ -132,6 +163,7 @@ class AdDetail extends Component {
                 </div>
             )
         }
+
         return (
             <div>
                 <Row>
@@ -168,9 +200,9 @@ class AdDetail extends Component {
 
                     </Col>
                     <Col span={12} >
-                        <div style={{'margin-bottom': '10px','margin-top': '10px','margin-left': '10px',}}>
+                        <div style={{'margin-bottom': '10px','margin-top': '10px','marginLeft': '10px',}}>
 {/*                            <Button onClick={e => this.handleClick(e)}>花费</Button>*/}
-                            <Select defaultValue="0" style={{ width: 120 }} onChange={e => this.handleClick(e)} >
+                            <Select defaultValue="0" style={{ width: 120 }} onChange={e => this.handleTableSelectClick(e)} >
                                 <Option value="0">花费</Option>
                                 <Option value="1">均价</Option>
                                 <Option value="2">出价</Option>
@@ -319,94 +351,94 @@ class App extends Component {
         super(props);
 
         const columns = [
-            {title: <div style={{'text-align': 'center'}}>广告名</div>, dataIndex: 'planname', key: 'planname',width:190},
-            {title: <div style={{'text-align': 'center'}}>游戏信息</div>, dataIndex: 'gpic', key: 'gpic',width:200,render: (gpic,record) => {
+            {title: <div style={{'textAlign': 'center'}}>广告名</div>, dataIndex: 'planname', key: 'planname',width:190},
+            {title: <div style={{'textAlign': 'center'}}>游戏信息</div>, dataIndex: 'gpic', key: 'gpic',width:200,render: (gpic,record) => {
                 return (
-                    <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
+                    <div style={{display: 'flex','flexDirection': 'row','alignItems':'center','justifyContent': 'center',}}>
                         <img src={gpic} height="40" width="40" />
-                        <div style={{'margin-left': '10px'}}>{record.gname}<br></br>{record.notes}</div>
+                        <div style={{'marginLeft': '10px'}}>{record.gname}<br></br>{record.notes}</div>
                     </div>
                 );
             }},
-            {title: <div style={{'text-align': 'center'}}>花费<br></br>(现金+虚拟)</div>, dataIndex: 'money', key: 'money',width:130,
+            {title: <div style={{'textAlign': 'center'}}>花费<br></br>(现金+虚拟)</div>, dataIndex: 'money', key: 'money',width:130,
                 render: (money,record) => {
                 return (
-                    <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
-                        <div style={{'margin-left': '10px','text-align': 'center'}}>{money}<br></br>({record.truemoney}+{record.virtualmoney})</div>
+                    <div style={{display: 'flex','flexDirection': 'row','alignItems':'center','justifyContent': 'center',}}>
+                        <div style={{'marginLeft': '10px','textAlign': 'center'}}>{money}<br></br>({record.truemoney}+{record.virtualmoney})</div>
                     </div>
                 );}
             },
-            {title: <div style={{'text-align': 'center'}}>下载均价<br></br>出价</div>, dataIndex: 'avgmoney', key: 'avgmoney',width:150,
+            {title: <div style={{'textAlign': 'center'}}>下载均价<br></br>出价</div>, dataIndex: 'avgmoney', key: 'avgmoney',width:150,
                 render: (avgmoney,record) => {
                     return (
-                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
-                            <div style={{'margin-left': '10px','text-align': 'center'}}>{avgmoney}<br></br>({record.bid})</div>
+                        <div style={{display: 'flex','flexDirection': 'row','alignItems':'center','justifyContent': 'center',}}>
+                            <div style={{'marginLeft': '10px','textAlign': 'center'}}>{avgmoney}<br></br>({record.bid})</div>
                         </div>
                     );}
             },
-            {title: <div style={{'text-align': 'center'}}>ECPM</div>, dataIndex: 'ecpm', key: 'ecpm',width:130,
+            {title: <div style={{'textAlign': 'center'}}>ECPM</div>, dataIndex: 'ecpm', key: 'ecpm',width:130,
                 render: (budTypeName,record) => {
                     return (
-                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
-                            <div style={{'margin-left': '10px','text-align': 'center'}}>{budTypeName}</div>
+                        <div style={{display: 'flex','flexDirection': 'row','alignItems':'center','justifyContent': 'center',}}>
+                            <div style={{'marginLeft': '10px','textAlign': 'center'}}>{budTypeName}</div>
                         </div>
                     );}
             },
-            {title: <div style={{'text-align': 'center'}}>下载率%<br></br>自然下载率%</div>, dataIndex: 'clickrate', key: 'clickrate',width:150,
+            {title: <div style={{'textAlign': 'center'}}>下载率%<br></br>自然下载率%</div>, dataIndex: 'clickrate', key: 'clickrate',width:150,
                 render: (clickrate,record) => {
                     return (
-                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
-                            <div style={{'margin-left': '10px','text-align': 'center'}}>{clickrate}<br></br>({record.naturalClickRadio})</div>
+                        <div style={{display: 'flex','flexDirection': 'row','alignItems':'center','justifyContent': 'center',}}>
+                            <div style={{'marginLeft': '10px','textAlign': 'center'}}>{clickrate}<br></br>({record.naturalClickRadio})</div>
                         </div>
                     );}},
-            {title: <div style={{'text-align': 'center'}}>展示量<br></br>自然展示量</div>, dataIndex: 'displaycount', key: 'displaycount',width:150,
+            {title: <div style={{'textAlign': 'center'}}>展示量<br></br>自然展示量</div>, dataIndex: 'displaycount', key: 'displaycount',width:150,
                 render: (clickrate,record) => {
                     return (
-                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
-                            <div style={{'margin-left': '10px','text-align': 'center'}}>{clickrate}<br></br>({record.naturalClickRadio})</div>
+                        <div style={{display: 'flex','flexDirection': 'row','alignItems':'center','justifyContent': 'center',}}>
+                            <div style={{'marginLeft': '10px','textAlign': 'center'}}>{clickrate}<br></br>({record.naturalClickRadio})</div>
                         </div>
                     );}
             },
-            {title: <div style={{'text-align': 'center'}}>下载量<br></br>自然下载量</div>, dataIndex: 'clickcount', key: 'clickcount',width:130,
+            {title: <div style={{'textAlign': 'center'}}>下载量<br></br>自然下载量</div>, dataIndex: 'clickcount', key: 'clickcount',width:130,
                 render: (clickcount,record) => {
                     return (
-                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
-                            <div style={{'margin-left': '10px','text-align': 'center'}}>{clickcount}<br></br>({record.naturalDisplayAmount})</div>
+                        <div style={{display: 'flex','flexDirection': 'row','alignItems':'center','justifyContent': 'center',}}>
+                            <div style={{'marginLeft': '10px','textAlign': 'center'}}>{clickcount}<br></br>({record.naturalDisplayAmount})</div>
                         </div>
                     );}
             },
-            {title: <div style={{'text-align': 'center'}}>投放排名<br></br>自然排名</div>, dataIndex: 'avgpos', key: 'avgpos',width:130,
+            {title: <div style={{'textAlign': 'center'}}>投放排名<br></br>自然排名</div>, dataIndex: 'avgpos', key: 'avgpos',width:130,
                 render: (avgpos,record) => {
                     return (
-                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
-                            <div style={{'margin-left': '10px','text-align': 'center'}}>{avgpos}<br></br>({record.naturalAvgPos})</div>
+                        <div style={{display: 'flex','flexDirection': 'row','alignItems':'center','justifyContent': 'center',}}>
+                            <div style={{'marginLeft': '10px','textAlign': 'center'}}>{avgpos}<br></br>({record.naturalAvgPos})</div>
                         </div>
                     );}
             },
-            {title: <div style={{'text-align': 'center'}}>首屏</div>, dataIndex: 'isFirstScreen', key: 'isFirstScreen',width:120,
+            {title: <div style={{'textAlign': 'center'}}>首屏</div>, dataIndex: 'isFirstScreen', key: 'isFirstScreen',width:120,
                 render: (isFirstScreen) => {
                     let display = "不限";
                     if(isFirstScreen == 1)
                         display = '首屏';
                     return (
-                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
-                            <div style={{'margin-left': '10px','text-align': 'center'}}>{display}</div>
+                        <div style={{display: 'flex','flexDirection': 'row','alignItems':'center','justifyContent': 'center',}}>
+                            <div style={{'marginLeft': '10px','textAlign': 'center'}}>{display}</div>
                         </div>
                     );}
             },
-            {title: <div style={{'text-align': 'center'}}>状态</div>, dataIndex: 'stateName', key: 'stateName',width:140,
+            {title: <div style={{'textAlign': 'center'}}>状态</div>, dataIndex: 'stateName', key: 'stateName',width:140,
                 render: (stateName,record) => {
                     return (
-                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
-                            <div style={{'margin-left': '10px','text-align': 'center'}}>{stateName}</div>
+                        <div style={{display: 'flex','flexDirection': 'row','alignItems':'center','justifyContent': 'center',}}>
+                            <div style={{'marginLeft': '10px','textAlign': 'center'}}>{stateName}</div>
                         </div>
                     );}
             },
-            {title: <div style={{'text-align': 'center'}}>限额(元)</div>, dataIndex: 'budTypeName', key: 'budTypeName',
+            {title: <div style={{'textAlign': 'center'}}>限额(元)</div>, dataIndex: 'budTypeName', key: 'budTypeName',
                 render: (budTypeName,record) => {
                     return (
-                        <div style={{display: 'flex','flex-direction': 'row','align-items':'center','justify-content': 'center',}}>
-                            <div style={{'margin-left': '10px','text-align': 'center'}}>{budTypeName}</div>
+                        <div style={{display: 'flex','flexDirection': 'row','alignItems':'center','justifyContent': 'center',}}>
+                            <div style={{'marginLeft': '10px','textAlign': 'center'}}>{budTypeName}</div>
                         </div>
                     );}
             },
@@ -691,6 +723,10 @@ class App extends Component {
             data:data,
             start:this.GetDateStr(0),
             end:this.GetDateStr(0),
+            userTypeValue:'a',
+            adTypeValue:'a',
+            adId:'',
+            username:'',
         }
 
     }
@@ -722,9 +758,7 @@ class App extends Component {
         })
     }
 
-    userTypeChange(e) {
-        console.log(`radio checked:${e.target.value}`);
-    }
+
 
     handleMenuClick(e) {
         message.info('Click on menu item.');
@@ -738,6 +772,46 @@ class App extends Component {
     handleTabChange(key) {
         console.log(`selected 1111 ${key}`);
         this.setState({tabSelected:key});
+    }
+
+    userTypeChange(e) {
+        //console.log(`radio checked:${e.target.value}`);
+        this.setState({userTypeValue:e.target.value,username:''})
+    }
+
+    usernameChange(e) {
+        const username = e.target.value;
+        this.setState({username:username})
+    }
+
+    usernameOnBlur(e) {
+        const username = e.target.value;
+        if(username == '') {
+            this.setState({userTypeValue:'a'})
+        } else {
+            //console.log('usernameChange',e.target.value)
+            this.setState({userTypeValue:''})
+        }
+    }
+
+    adTypeChange(e) {
+        //console.log(`radio checked:${e.target.value}`);
+        this.setState({adTypeValue:e.target.value,adId:''})
+    }
+
+    adChange(e) {
+        const adId = e.target.value;
+        this.setState({adId:adId})
+    }
+
+    adOnBlur(e) {
+        const adId = e.target.value;
+        if(adId == '') {
+            this.setState({adTypeValue:'a',adId:adId})
+        } else {
+            //console.log('usernameChange',e.target.value)
+            this.setState({adTypeValue:'',adId:adId})
+        }
     }
 
     fetch = (params = {}) => {
@@ -763,8 +837,10 @@ class App extends Component {
             });*!/
             console.log("12345",data);
         });*/
-
-        fetch('http://127.0.0.1:8080/adgame_ms/statistics/loadPlanStatistics0508ForWebix?date1=2017-10-04&date2=2017-10-11&username=&planname=&planId=&gid=&stateName=-1&plantype=0&pageNo=1&pageSize=24&sort=money&usertype=none&isFirstScreen=-1&isExact=false',{credentials: 'include'}).then(response => response.json())
+        const url1='http://127.0.0.1:8080/adgame_ms/statistics/loadPlanStatistics0508ForWebix?date1=2017-10-04&date2=2017-10-11&username=&planname=&planId=&gid=&stateName=-1&plantype=0&pageNo=1&pageSize=24&sort=money&usertype=none&isFirstScreen=-1&isExact=false';
+        const url2 ='http://192.168.50.218:8080/newStatistics/loadUserInfo.do?startDate=2017-10-16&endDate=2017-10-16&userInfo=&userType=all&sort=totalMoney&pageNo=1&pageSize=10';
+        fetch(url2/*{credentials: 'include'}*/)
+            .then(response => response.json())
             .then(data =>
             {
                 console.log(data.page.result)
@@ -773,6 +849,8 @@ class App extends Component {
                 })*/
             })
             .catch(e => console.log("Oops, error", e))
+
+
 
     }
 
@@ -803,7 +881,7 @@ class App extends Component {
         const Allad = (
             <div>
                 <div>
-                    <label>{this.state.start},{this.state.end}</label>
+                    <label>{this.state.start},{this.state.end},{this.state.userTypeValue}</label>
                 </div>
                 <div className="search-Div">
                     <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
@@ -811,7 +889,8 @@ class App extends Component {
                         <Col className="gutter-row">
                             <Row type="flex" justify="start">
                                 <Col>
-                                    <RadioGroup onChange={e => this.userTypeChange(e)} defaultValue="a" >
+                                    <RadioGroup onChange={e => this.userTypeChange(e)} defaultValue={this.state.userTypeValue}
+                                                value={this.state.userTypeValue}>
                                         <RadioButton value="a">全部用户</RadioButton>
                                         <RadioButton value="b">外部用户</RadioButton>
                                         <RadioButton value="c">内部用户</RadioButton>
@@ -820,28 +899,39 @@ class App extends Component {
                             </Row>
                         </Col>
                         <Col  className="username-input">
-                            <Input size="default" placeholder="用户名1" />
+                            <Input size="default" placeholder="请输入用户名或用户ID" onBlur={e => this.usernameOnBlur(e)} value={this.state.username}
+                                   onChange={e => this.usernameChange(e)}/>
                         </Col>
                     </Row>
                     <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
                         <Col span={2}>游戏:</Col>
                         <Col span={4}>
-                            <Input size="default" placeholder="游戏ID" />
+                            <Input size="default" placeholder="请输入游戏名或游戏ID" />
                         </Col>
                     </Row>
                     <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
-                        <Col span={2}>广告:</Col>
+                        <Col span={2}>广告类型:</Col>
                         <Col>
                             <Row type="flex" justify="start">
                                 <Col>
-                                    <RadioGroup onChange={e => this.userTypeChange(e)} defaultValue="a" >
-                                        <RadioButton value="a">全部类型</RadioButton>
+                                    <RadioGroup onChange={e => this.adTypeChange(e)} defaultValue="a" value={this.state.adTypeValue}>
+                                        <RadioButton value="a">全部广告</RadioButton>
                                         <RadioButton value="b">搜索广告</RadioButton>
                                         <RadioButton value="c">定向广告</RadioButton>
                                     </RadioGroup>
                                 </Col>
                             </Row>
                         </Col>
+                        <Col>
+                            <Col  className="username-input">
+                                <Input size="default" placeholder="请输入广告名或者广告ID" onBlur={e => this.adOnBlur(e)} value={this.state.adId}
+                                       onChange={e => this.adChange(e)}/>
+                            </Col>
+                        </Col>
+                    </Row>
+
+                    <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
+                        <Col span={2}>广告状态:</Col>
                         <Col>
                             <Row type="flex" justify="start">
                                 <Col>
@@ -852,11 +942,6 @@ class App extends Component {
                                     </RadioGroup>
                                 </Col>
                             </Row>
-                        </Col>
-                        <Col>
-                            <Dropdown.Button overlay={menu}>
-                                选择其他状态
-                            </Dropdown.Button>
                         </Col>
                         <Col>
                             <Select
@@ -873,11 +958,6 @@ class App extends Component {
 
                             </Select>
                         </Col>
-                        <Col span={2}>
-                            <Input size="default" placeholder="游戏ID" />
-                        </Col>
-
-
                     </Row>
 
                     <Row type="flex" align="middle" justify="start">
@@ -911,22 +991,23 @@ class App extends Component {
                             </Select>
                         </Col>
                     </Row>
-
                 </div>
                 <Spin spinning={false}>
                         <Table
                             columns={this.state.columns}
                             bordered
                             size="middle"
+                            /*expandedRowRender={record => { return null}}*/
                             /*scroll={{ y: 1240 }}*/
-                            /*expandedRowRender={record => { if(record.key === 0) return null ;else return <AdDetail adInfo={record} />}}*/
-                            expandedRowRender={record => { console.log(record);return <AdDetail adInfo={record} />}}
+                            expandedRowRender={record => { if(record.key === 0) return null ;else return <AdDetail adInfo={record} />}}
+                            /*expandedRowRender={record => { console.log(record);return <AdDetail adInfo={record} />}}*/
                             dataSource={this.state.data}
                             className="tableInfo"
                             pagination={{ pageSize: 24 }}
                             locale={{emptyText:'没有找到相关信息，请更换搜索条件!'}}
                             rowKey={record => record.planid}
-                            scroll={{ y: 740 }}
+                            useFixedHeader={true}
+                           /* scroll={{ y: 740 }}*/
                             /*loading={true}*/
                         />
                 </Spin>
@@ -941,7 +1022,7 @@ class App extends Component {
                 <div className="tab">
                         <Tabs tabBarExtraContent={operations} onChange={ key => this.handleTabChange(key)} type="card"
                               activeKey={this.state.tabSelected}>
-                            <TabPane tab="用户列表" key="1">用户列表</TabPane>
+                            <TabPane tab="用户列表" key="1">用户列表1</TabPane>
                             <TabPane tab="游戏列表" key="2">123</TabPane>
                             <TabPane tab="广告列表" key="3">{Allad}</TabPane>
                             <TabPane tab="用户进展" key="4">{Allad}</TabPane>
