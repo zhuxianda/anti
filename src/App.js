@@ -724,9 +724,12 @@ class App extends Component {
             start:this.GetDateStr(0),
             end:this.GetDateStr(0),
             userTypeValue:'a',
-            adTypeValue:'a',
-            adId:'',
+            adTypeChoose:'all',
+            adInfoAd:'',
             username:'',
+            adStateChoose:'all',
+            adStateSelect:'',
+
         }
 
     }
@@ -794,25 +797,48 @@ class App extends Component {
         }
     }
 
-    adTypeChange(e) {
+    ////
+    adTypeChooseChange(e) {
         //console.log(`radio checked:${e.target.value}`);
-        this.setState({adTypeValue:e.target.value,adId:''})
+        this.setState({adTypeChoose:e.target.value,adInfoAd:''})
     }
 
     adChange(e) {
-        const adId = e.target.value;
-        this.setState({adId:adId})
+        const adInfoAd = e.target.value;
+        this.setState({adInfoAd:adInfoAd})
     }
 
     adOnBlur(e) {
         const adId = e.target.value;
         if(adId == '') {
-            this.setState({adTypeValue:'a',adId:adId})
+            this.setState({adTypeChoose:'all',adInfoAd:adId})
         } else {
             //console.log('usernameChange',e.target.value)
-            this.setState({adTypeValue:'',adId:adId})
+            this.setState({adTypeChoose:'',adInfoAd:adId})
         }
     }
+    ///
+
+    adStateChooseChange(e) {
+        //console.log(`radio checked:${e.target.value}`);
+        this.setState({adStateChoose:e.target.value,adStateSelect:''})
+    }
+
+    adStateSelectChange(value) {
+        console.log(value);
+        //const adStateSelect = e.target.value;
+        this.setState({adStateSelect:value,adStateChoose:''})
+    }
+
+/*    adOnBlur(e) {
+        const adId = e.target.value;
+        if(adId == '') {
+            this.setState({adTypeChoose:'all',adInfoAd:adId})
+        } else {
+            //console.log('usernameChange',e.target.value)
+            this.setState({adTypeChoose:'',adInfoAd:adId})
+        }
+    }*/
 
     fetch = (params = {}) => {
         console.log('params:', params);
@@ -880,137 +906,165 @@ class App extends Component {
 
         const Allad = (
             <div>
-                <div>
-                    <label>{this.state.start},{this.state.end},{this.state.userTypeValue}</label>
-                </div>
-                <div className="search-Div">
-                    <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
-                        <Col span={2}>用户:</Col>
-                        <Col className="gutter-row">
-                            <Row type="flex" justify="start">
-                                <Col>
-                                    <RadioGroup onChange={e => this.userTypeChange(e)} defaultValue={this.state.userTypeValue}
-                                                value={this.state.userTypeValue}>
-                                        <RadioButton value="a">全部用户</RadioButton>
-                                        <RadioButton value="b">外部用户</RadioButton>
-                                        <RadioButton value="c">内部用户</RadioButton>
-                                    </RadioGroup>
-                                </Col>
-                            </Row>
-                        </Col>
-                        <Col  className="username-input">
-                            <Input size="default" placeholder="请输入用户名或用户ID" onBlur={e => this.usernameOnBlur(e)} value={this.state.username}
-                                   onChange={e => this.usernameChange(e)}/>
-                        </Col>
-                    </Row>
-                    <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
-                        <Col span={2}>游戏:</Col>
-                        <Col span={4}>
-                            <Input size="default" placeholder="请输入游戏名或游戏ID" />
-                        </Col>
-                    </Row>
-                    <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
-                        <Col span={2}>广告类型:</Col>
-                        <Col>
-                            <Row type="flex" justify="start">
-                                <Col>
-                                    <RadioGroup onChange={e => this.adTypeChange(e)} defaultValue="a" value={this.state.adTypeValue}>
-                                        <RadioButton value="a">全部广告</RadioButton>
-                                        <RadioButton value="b">搜索广告</RadioButton>
-                                        <RadioButton value="c">定向广告</RadioButton>
-                                    </RadioGroup>
-                                </Col>
-                            </Row>
-                        </Col>
-                        <Col>
-                            <Col  className="username-input">
-                                <Input size="default" placeholder="请输入广告名或者广告ID" onBlur={e => this.adOnBlur(e)} value={this.state.adId}
-                                       onChange={e => this.adChange(e)}/>
+
+                    <div>
+
+                        <label>{this.state.start},{this.state.end},{this.state.userTypeValue}</label>
+                    </div>
+                    <div className="search-Div">
+                        <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
+                            <Col span={2}>用户:</Col>
+                            <Col className="gutter-row">
+                                <Row type="flex" justify="start">
+                                    <Col>
+                                        <RadioGroup onChange={e => this.userTypeChange(e)}
+                                                    defaultValue={this.state.userTypeValue}
+                                                    value={this.state.userTypeValue}>
+                                            <RadioButton value="a">全部用户</RadioButton>
+                                            <RadioButton value="b">外部用户</RadioButton>
+                                            <RadioButton value="c">内部用户</RadioButton>
+                                        </RadioGroup>
+                                    </Col>
+                                </Row>
                             </Col>
-                        </Col>
-                    </Row>
-
-                    <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
-                        <Col span={2}>广告状态:</Col>
-                        <Col>
-                            <Row type="flex" justify="start">
-                                <Col>
-                                    <RadioGroup onChange={e => this.userTypeChange(e)} defaultValue="a" >
-                                        <RadioButton value="a">全部类型</RadioButton>
-                                        <RadioButton value="b">广告未投放</RadioButton>
-                                        <RadioButton value="c">暂停中</RadioButton>
-                                    </RadioGroup>
+                            <Col className="username-input">
+                                <Input size="default" placeholder="请输入用户名或用户ID" onBlur={e => this.usernameOnBlur(e)}
+                                       value={this.state.username}
+                                       onChange={e => this.usernameChange(e)}/>
+                            </Col>
+                        </Row>
+                        <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
+                            <Col span={2}>游戏:</Col>
+                            <Col span={4}>
+                                <Input size="default" placeholder="请输入游戏名或游戏ID"/>
+                            </Col>
+                        </Row>
+                        <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
+                            <Col span={2}>广告类型:</Col>
+                            <Col>
+                                <Row type="flex" justify="start">
+                                    <Col>
+                                        <RadioGroup onChange={e => this.adTypeChooseChange(e)} defaultValue="all"
+                                                    value={this.state.adTypeChoose}>
+                                            <RadioButton value="all">全部广告</RadioButton>
+                                            <RadioButton value="search">搜索广告</RadioButton>
+                                            <RadioButton value="target">定向广告</RadioButton>
+                                        </RadioGroup>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col>
+                                <Col className="username-input">
+                                    <Input size="default" placeholder="请输入广告名或者广告ID" onBlur={e => this.adOnBlur(e)}
+                                           value={this.state.adInfoAd}
+                                           onChange={e => this.adChange(e)}/>
                                 </Col>
-                            </Row>
-                        </Col>
-                        <Col>
-                            <Select
-                                showSearch
-                                style={{ width: 200 }}
-                                placeholder="选择其他广告状态"
-                                optionFilterProp="children"
-                                onChange={value =>this.handleChange(value)}
-                                filterOption={(input, option) => {/*console.log(option.props);*/return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;}}
-                            >
-                                <Option value="1">投放中(暂停时段)</Option>
-                                <Option value="2">投放中(账户余额即将不足)</Option>
-                                <Option value="3">未投放(广告花费达到限额)</Option>
+                            </Col>
+                        </Row>
 
-                            </Select>
-                        </Col>
-                    </Row>
+                        <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
+                            <Col span={2}>广告状态:</Col>
+                            <Col>
+                                <Row type="flex" justify="start">
+                                    <Col>
+                                        <RadioGroup onChange={e => this.adStateChooseChange(e)} defaultValue="all"
+                                            value={this.state.adStateChoose}>
+                                            <RadioButton value="all">全部类型</RadioButton>
+                                            <RadioButton value="enable">广告未投放</RadioButton>
+                                            <RadioButton value="disable">暂停中</RadioButton>
+                                        </RadioGroup>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col>
+                                <Select
+                                    showSearch
+                                    style={{width: 200}}
+                                    placeholder="选择其他广告状态"
+                                    optionFilterProp="children"
+                                    onChange={value => this.adStateSelectChange(value)}
+                                    value={this.state.adStateSelect}
+                                    filterOption={(input, option) => {/*console.log(option.props);*/
+                                        return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+                                    }}
+                                >
+                                    <Option value="all">全部类型</Option>
+                                    <Option value="pause">广告暂停</Option>
+                                    <Option value="pauseMoment">投放中-暂停时段</Option>
+                                    <Option value="shortOfBalance">投放中-账户余额即将不足</Option>
+                                    <Option value="lackOfBalance">未投放-账户余额不足</Option>
+                                    <Option value="shortOfAdBud">未投放-广告花费达到限额</Option>
+                                    <Option value="shortOfGameBud">未投放-游戏花费达到限额</Option>
+                                    <Option value="shortOfAccountBud">未投放-账户花费达到限额</Option>
+                                    <Option value="simGameOffline">未投放-竞品游戏下线</Option>
+                                    <Option value="auditSuccess">游戏审核通过</Option>
+                                    <Option value="auditFail">游戏审核失败</Option>
+                                    <Option value="underAudit">游戏待审核</Option>
+                                    <Option value="underPromote">广告待投放</Option>
+                                    <Option value="aferPromote">广告投放结束</Option>
+                                    <Option value="delete">广告被删除</Option>
 
-                    <Row type="flex" align="middle" justify="start">
-                        <Col span={1} offset={2}>
-                            <Button type="primary" icon="search" className="button">搜索</Button>
-                        </Col>
-                        <Col span={1}>
-                            <Button type="primary" icon="reload" className="button">重置</Button>
-                        </Col>
-                    </Row>
+                                </Select>
+                            </Col>
+                        </Row>
 
-                </div>
-                <div className="sortDiv">
-                    <Row type="flex" justify="start" align="middle" gutter={8}>
-                        <Col>
-                            <label>排序方式:</label>
-                        </Col>
-                        <Col>
-                            <Select
-                                showSearch
-                                style={{ width: 200 }}
-                                placeholder="选择其他广告状态"
-                                optionFilterProp="children"
-                                onChange={value =>this.handleChange(value)}
-                                filterOption={(input, option) => {/*console.log(option.props);*/return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;}}
-                            >
-                                <Option value="1">投放中(暂停时段)</Option>
-                                <Option value="2">投放中(账户余额即将不足)</Option>
-                                <Option value="3">未投放(广告花费达到限额)</Option>
+                        <Row className="ColInfo" type="flex" align="middle" justify="start" gutter={16}>
+                            <Col span={2}>排序方式:</Col>
+                            <Col>
+                                <Select
+                                    showSearch
+                                    style={{width: 200}}
+                                    placeholder="选择其他广告状态"
+                                    optionFilterProp="children"
+                                    onChange={value => this.handleChange(value)}
+                                    filterOption={(input, option) => {/*console.log(option.props);*/
+                                        return option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+                                    }}
+                                >
+                                    <Option value="createTime">推广时间</Option>
+                                    <Option value="cost">总花费</Option>
+                                    <Option value="averageBid">下载均价</Option>
+                                    <Option value="ecpm">ECPM</Option>
+                                    <Option value="naturalClick">自然下载量</Option>
+                                    <Option value="avgPos">排名</Option>
+                                    <Option value="naturalAvgPos">自然排名</Option>
 
-                            </Select>
-                        </Col>
-                    </Row>
-                </div>
-                <Spin spinning={false}>
+                                </Select>
+                            </Col>
+                        </Row>
+
+                        <Row type="flex" align="middle" justify="start">
+                            <Col span={1} offset={2}>
+                                <Button type="primary" icon="search" className="button">搜索</Button>
+                            </Col>
+                            <Col span={1}>
+                                <Button type="primary" icon="reload" className="button">重置</Button>
+                            </Col>
+                        </Row>
+
+                    </div>
+
+                    <Spin spinning={false}>
                         <Table
                             columns={this.state.columns}
                             bordered
                             size="middle"
                             /*expandedRowRender={record => { return null}}*/
                             /*scroll={{ y: 1240 }}*/
-                            expandedRowRender={record => { if(record.key === 0) return null ;else return <AdDetail adInfo={record} />}}
+                            expandedRowRender={record => {
+                                if (record.key === 0) return null; else return <AdDetail adInfo={record}/>
+                            }}
                             /*expandedRowRender={record => { console.log(record);return <AdDetail adInfo={record} />}}*/
                             dataSource={this.state.data}
                             className="tableInfo"
-                            pagination={{ pageSize: 24 }}
-                            locale={{emptyText:'没有找到相关信息，请更换搜索条件!'}}
+                            pagination={{pageSize: 24}}
+                            locale={{emptyText: '没有找到相关信息，请更换搜索条件!'}}
                             rowKey={record => record.planid}
                             useFixedHeader={true}
-                           /* scroll={{ y: 740 }}*/
+                            /* scroll={{ y: 740 }}*/
                             /*loading={true}*/
                         />
-                </Spin>
+                    </Spin>
             </div>
         );
 
